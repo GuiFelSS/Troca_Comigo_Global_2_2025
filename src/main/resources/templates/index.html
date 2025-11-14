@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Global Solution - Teste DevOps</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        h1 { color: #004a91; }
+        .user-card { background-color: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .user-card strong { color: #d9534f; }
+    </style>
+</head>
+<body>
+
+<h1>🚀 Teste Deploy CI/CD - SkillSwap Hub 1.0</h1>
+
+<h2>Usuários Cadastrados</h2>
+<div th:if="${usuarios.empty}">
+    <p>Nenhum usuário cadastrado ainda.</p>
+</div>
+
+<div th:each="user : ${usuarios}" class="user-card">
+    <strong>Nome:</strong> <span th:text="${user.fullName}"></span><br/>
+    <strong>Email:</strong> <span th:text="${user.email}"></span><br/>
+    <strong>Créditos:</strong> <span th:text="${user.timeCredits}"></span>
+</div>
+
+</body>
+</html>

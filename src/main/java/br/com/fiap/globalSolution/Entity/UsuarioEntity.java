@@ -83,6 +83,12 @@ public class UsuarioEntity implements UserDetails {
         return id;
     }
 
+    // --- O MÉTODO QUE FALTAVA PARA O TESTE ---
+    public void setId(String id) {
+        this.id = id;
+    }
+    // ----------------------------------------
+
     public String getFullName() {
         return fullName;
     }
@@ -115,7 +121,7 @@ public class UsuarioEntity implements UserDetails {
         this.averageRating = averageRating;
     }
 
-    // --- Setters (para Builder e UpdateService) ---
+    // --- Setters ---
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
@@ -144,7 +150,6 @@ public class UsuarioEntity implements UserDetails {
         this.habilidades = habilidades;
     }
 
-    // --- ADIÇÕES PARA ATUALIZAÇÃO DE PERFIL ---
     public String getBio() {
         return bio;
     }
@@ -184,7 +189,6 @@ public class UsuarioEntity implements UserDetails {
     public void setLinkedinUrl(String linkedinUrl) {
         this.linkedinUrl = linkedinUrl;
     }
-    // --- FIM DAS ADIÇÕES ---
 
 
     // ========= MÉTODOS DO UserDetails =========
@@ -223,7 +227,6 @@ public class UsuarioEntity implements UserDetails {
     }
 
     public static class UsuarioEntityBuilder {
-        // ... (código do builder continua o mesmo)
         private String fullName;
         private String email;
         private String password;

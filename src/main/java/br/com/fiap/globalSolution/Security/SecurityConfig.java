@@ -53,17 +53,21 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        // --- LIBERA OS ENDPOINTS DE AUTENTICAÇÃO E DOCS ---
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                        .anyRequest().authenticated()
+
+                        // ---- ADIÇÃO IMPORTANTE AQUI ----
+                        .requestMatchers(HttpMethod.GET, "/").permitAll() // Libera a Home Page
+                        // ---------------------------------
+
+                        .anyRequest().authenticated() // Bloqueia todo o resto
                 )
                 .authenticationProvider(authenticationProvider())
-
-                // 2. ADICIONE O FILTRO NA CADEIA DE SEGURANÇA
-                // Isso garante que nosso filtro rode antes do filtro de autenticação padrão
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 }
