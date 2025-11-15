@@ -20,9 +20,9 @@
 </div>
 
 <div th:each="user : ${usuarios}" class="user-card">
-    <strong>Nome:</strong> <span th:text="${user.fullName}"></span><br/>
-    <strong>Email:</strong> <span th:text="${user.email}"></span><br/>
-    <strong>Créditos:</strong> <span th:text="${user.timeCredits}"></span>
+    <strong>Nome:</strong> <span th:text="${user.getFullName()}"></span><br/>
+    <strong>Email:</strong> <span th:text="${user.getUsername()}"></span><br/>
+    <strong>Créditos:</strong> <span th:text="${user.getTimeCredits()}"></span>
 </div>
 
 </body>

@@ -1,5 +1,6 @@
 package br.com.fiap.globalSolution.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore; // <-- IMPORTAR ISSO
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,7 @@ public class UsuarioEntity implements UserDetails {
     private String fullName;
 
     @Column(nullable = false)
+    @JsonIgnore // <-- ADICIONADO (Nunca envie a senha no JSON)
     private String password; // Hash
 
     @Enumerated(EnumType.STRING)
@@ -60,20 +62,34 @@ public class UsuarioEntity implements UserDetails {
     @LastModifiedDate
     private LocalDateTime updatedDate;
 
-    // ========= Relacionamentos =========
+    // ========= Relacionamentos (Ignorados no JSON para evitar Lazy Loading) =========
+
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // <-- ADICIONADO (Resolve o erro 403/Lazy Loading)
     private List<HabilidadeEntity> habilidades;
+
     @OneToMany(mappedBy = "mentor")
+    @JsonIgnore // <-- ADICIONADO
     private List<SessoesEntity> sessoesComoMentor;
+
     @OneToMany(mappedBy = "mentorado")
+    @JsonIgnore // <-- ADICIONADO
     private List<SessoesEntity> sessoesComoMentorado;
+
     @OneToMany(mappedBy = "remetente")
+    @JsonIgnore // <-- ADICIONADO
     private List<TransferenciaEntity> transferenciasEnviadas;
+
     @OneToMany(mappedBy = "destinatario")
+    @JsonIgnore // <-- ADICIONADO
     private List<TransferenciaEntity> transferenciasRecebidas;
+
     @OneToMany(mappedBy = "avaliador")
+    @JsonIgnore // <-- ADICIONADO
     private List<AvaliacaoEntity> avaliacoesFeitas;
+
     @OneToMany(mappedBy = "avaliado")
+    @JsonIgnore // <-- ADICIONADO
     private List<AvaliacaoEntity> avaliacoesRecebidas;
 
 
@@ -82,12 +98,15 @@ public class UsuarioEntity implements UserDetails {
     public String getId() {
         return id;
     }
-
-    // --- O MÉTODO QUE FALTAVA PARA O TESTE ---
     public void setId(String id) {
         this.id = id;
     }
-    // ----------------------------------------
+
+    // --- O GETTER QUE FALTAVA PARA O THYMELEAF ---
+    public String getEmail() {
+        return email;
+    }
+    // ------------------------------------------
 
     public String getFullName() {
         return fullName;
@@ -192,30 +211,39 @@ public class UsuarioEntity implements UserDetails {
 
 
     // ========= MÉTODOS DO UserDetails =========
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
+
     @Override
     public String getUsername() {
+        // Este método já usa o campo 'email', o que é perfeito.
         return this.email;
     }
+
     @Override
+    @JsonIgnore // <-- ADICIONADO
     public String getPassword() {
         return this.password;
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
+
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
+
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
     @Override
     public boolean isEnabled() {
         return true;
