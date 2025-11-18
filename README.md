@@ -121,4 +121,122 @@ mvn spring-boot:run
 - ```GET /api/avaliacoes/user/{usuarioId}``` - Lista todas as avaliações recebidas por um usuário.
 
 **Inteligência Artificial (IA) - 🔒 Protegido**
-- ```POST /api/ia/gerar-bio``` - Gera uma biografia de perfil usando IA.  
+- ```POST /api/ia/gerar-bio``` - Gera uma biografia de perfil usando IA.
+
+## 🧪 Guia de Testes Manuais (Postman / Insomnia)
+
+Para validar o funcionamento da API, recomenda-se o uso do **Postman** ou **Insomnia**. Abaixo está um roteiro de teste para simular o fluxo completo de uso da plataforma.
+
+**URL Base (Produção):** `https://troca-comigo-global-2-2025-n89g.onrender.com`
+
+### 1. Autenticação
+
+**1.1 Registrar Usuário (Mentor)**
+* **Método:** `POST`
+* **URL:** `/auth/register`
+* **Body (JSON):**
+  ```json
+  {
+    "fullName": "Mentor Java",
+    "email": "mentor@teste.com",
+    "password": "senha123"
+  }
+  ```
+* **Status Esperado:** `200 OK`
+
+**1.2 Login (Gerar Token)**
+* **Método:** `POST`
+**URL:** `/auth/login`
+**Body (JSON):**
+  ```json
+  {
+  "email": "mentor@teste.com",
+  "password": "senha123"
+  }
+  ```
+* **Status Esperado:** `200 OK`
+* **⚠️ Importante:** Copie o `token` retornado. Você precisará dele no cabeçalho Authorization (Bearer Token) para todas as requisições abaixo.
+
+### 2. Perfil e Habilidades
+
+**2.1 Ver Meu Perfil**
+* **Método:** `GET`
+* **URL:** `/api/users/me`
+* **Auth:** Bearer Token
+* **Status Esperado:** `200 OK`
+
+**2.2 Criar uma Habilidade**
+* **Método:** `POST`
+* **URL:** `/api/habilidades`
+* **Auth:** Bearer Token
+* **Body (JSON):**
+  ```json
+  {
+  "name": "Mentoria Spring Boot",
+  "category": "TECNOLOGIA",
+  "description": "Aulas avançadas de Java e Microservices",
+  "level": "ESPECIALISTA",
+  "isOffering": true,
+  "isSeeking": false,
+  "hourlyRate": 1.0
+  }
+  ```
+* **Status Esperado:** `201 Created` (Copie o `id` da habilidade criada)
+
+### 3. Sessões de Mentoria
+
+**3.1 Agendar Sessão (Como Aluno)** (Dica: Crie um segundo usuário "Aluno" seguindo o passo 1 para testar este fluxo realisticamente)
+* **Método:** `POST`
+* **URL:** `/api/sessoes`
+* **Auth:** Bearer Token (do Aluno)
+* **Body (JSON):**
+ ```json
+  {
+  "habilidadeId": "ID_DA_HABILIDADE_CRIADA",
+  "mentorId": "ID_DO_MENTOR",
+  "scheduledDate": "2025-12-20T15:00:00",
+  "notes": "Gostaria de aprender sobre Spring Security."
+  }
+  ```
+* **Status Esperado:** `201 Created`
+
+**3.2 Completar Sessão (Como Mentor)**
+* **Método:** `PATCH`
+* **URL:** `/api/sessoes/{id_da_sessao}/completar`
+* **Auth:** Bearer Token (do Mentor)
+* **Status Esperado:** `200 OK`
+
+### 4. Avaliações e Extrato
+**4.1 Avaliar a Sessão**
+
+* **Método:** `POST`
+* **URL:** `/api/avaliacoes`
+* **Auth:** Bearer Token
+* **Body (JSON):**
+ ```json
+  {
+    "sessaoId": "ID_DA_SESSAO_CONCLUIDA",
+    "rating": 5,
+    "comment": "Excelente mentoria!"
+  }
+  ```
+* **Status Esperado:** `201 Created`
+
+**4.2 Ver Extrato de Créditos**
+* **Método:** `GET`
+* **URL:** `/api/transferencias/me`
+* **Auth:** Bearer Token
+* **Status Esperado:** `200 OK` (Deve mostrar o débito/crédito da sessão)
+
+### 5. Inteligência Artificial
+**5.1 Gerar Bio Profissional**
+* **Método:** `POST`
+* **URL:** `/api/ia/gerar-bio`
+* **Auth:** Bearer Token
+* **Body (JSON):**
+  ```json
+  {
+    "promptKeywords": "Java, Spring Boot, AWS, Liderança Técnica"
+  }
+  ```
+* **Status Esperado:** `200 OK` (Retorna um texto gerado pela IA)
