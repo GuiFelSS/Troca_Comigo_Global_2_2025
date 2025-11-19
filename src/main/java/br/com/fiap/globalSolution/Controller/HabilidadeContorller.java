@@ -45,6 +45,20 @@ public class HabilidadeContorller {
     }
 
     /**
+     * Endpoint para ATUALIZAR uma habilidade existente.
+     * O app mobile fará um PUT para /api/habilidades/{id}
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<HabilidadeEntity> updateHabilidade(
+            @PathVariable String id,
+            @Valid @RequestBody HabilidadeDto dto,
+            @AuthenticationPrincipal UsuarioEntity usuario
+    ) {
+        HabilidadeEntity habilidadeAtualizada = habilidadeService.update(id, dto, usuario);
+        return ResponseEntity.ok(habilidadeAtualizada);
+    }
+
+    /**
      * Endpoint para DELETAR uma habilidade do usuário logado.
      * O app mobile fará um DELETE para /api/habilidades/{id_da_habilidade}
      */

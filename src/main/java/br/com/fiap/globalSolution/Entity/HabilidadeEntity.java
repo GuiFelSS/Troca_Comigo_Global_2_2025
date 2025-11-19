@@ -2,11 +2,10 @@ package br.com.fiap.globalSolution.Entity;
 
 import br.com.fiap.globalSolution.Enum.Category;
 import br.com.fiap.globalSolution.Enum.Level;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-// import lombok.Getter; // <-- REMOVIDO
 import lombok.NoArgsConstructor;
-// import lombok.Setter; // <-- REMOVIDO
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,8 +14,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "TB_HABILIDADES")
 @EntityListeners(AuditingEntityListener.class)
-// @Getter // <-- REMOVIDO
-// @Setter // <-- REMOVIDO
 @NoArgsConstructor
 @AllArgsConstructor
 public class HabilidadeEntity {
@@ -47,13 +44,13 @@ public class HabilidadeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
+    @JsonIgnore
     private UsuarioEntity usuario;
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;
 
-    // --- GETTERS E SETTERS MANUAIS (Para corrigir os erros) ---
 
     public String getId() {
         return id;

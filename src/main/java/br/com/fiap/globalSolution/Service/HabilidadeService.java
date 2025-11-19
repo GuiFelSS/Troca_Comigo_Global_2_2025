@@ -42,6 +42,31 @@ public class HabilidadeService {
         return habilidadeRepository.save(habilidade);
     }
 
+    @Transactional
+    public HabilidadeEntity update(String id, HabilidadeDto dto, UsuarioEntity usuario) {
+        // 1. Busca a habilidade
+        HabilidadeEntity habilidade = habilidadeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Habilidade não encontrada"));
+
+        // 2. Verifica se pertence ao usuário
+        if (!habilidade.getUsuario().getId().equals(usuario.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para alterar esta habilidade");
+        }
+
+        // 3. Atualiza os dados
+        habilidade.setName(dto.getName());
+        habilidade.setCategory(dto.getCategory());
+        habilidade.setDescription(dto.getDescription());
+        habilidade.setLevel(dto.getLevel());
+        habilidade.setIsOffering(dto.getIsOffering());
+        habilidade.setIsSeeking(dto.getIsSeeking());
+        habilidade.setHourlyRate(dto.getHourlyRate());
+
+        // Nota: Não atualizamos createdDate nem usuario
+
+        return habilidadeRepository.save(habilidade);
+    }
+
     // Método para DELETAR uma habilidade
     @Transactional
     public void delete(String habilidadeId, UsuarioEntity usuario) {

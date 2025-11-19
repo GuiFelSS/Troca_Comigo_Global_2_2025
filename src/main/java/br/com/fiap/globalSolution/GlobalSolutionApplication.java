@@ -2,8 +2,8 @@ package br.com.fiap.globalSolution;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching; // <-- IMPORTAR
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing; // <-- IMPORTAR
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableCaching // <-- 1. HABILITA O CACHING

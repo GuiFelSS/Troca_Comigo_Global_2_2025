@@ -63,4 +63,16 @@ public class UsuarioController {
         UsuarioEntity usuarioAtualizado = usuarioService.updateProfile(usuarioLogado, dto);
         return ResponseEntity.ok(usuarioAtualizado);
     }
+
+    /**
+     * Endpoint para EXCLUIR a própria conta.
+     * O app mobile fará um DELETE para /api/users/me
+     */
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteMinhaConta(
+            @AuthenticationPrincipal UsuarioEntity usuarioLogado
+    ) {
+        usuarioService.deleteMyAccount(usuarioLogado);
+        return ResponseEntity.noContent().build();
+    }
 }
